@@ -48,7 +48,7 @@ public class Main19Activity extends AppCompatActivity {
         show = findViewById(R.id.show);
         progressbar = findViewById(R.id.progressbar);
         progressbar.setProgress(0);
-
+// create directory new if !exists
         checkAndCreateDirectory("/test_async_task");
 
         download.setOnClickListener(new View.OnClickListener() {

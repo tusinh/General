@@ -24,8 +24,14 @@ public class Main19Activity extends AppCompatActivity {
     Button download, show;
     ProgressBar progressbar;
 
-    String fileUrl = "http://autobikes.vn/stores//hoanghiep/072017/18/18/181200_1.jpg";
-    String fileName = "anh1.jpg";
+    String fileUrl = "http://divivuvn.com/wp-content/uploads/2017/12/thac-dambri.jpg";
+    String fileUrl1 = "http://divivuvn.com/wp-content/uploads/2017/12/biet-thu-hang-nga-da-lat.jpg";
+    String fileUrl2 = "http://divivuvn.com/wp-content/uploads/2017/12/secret-garden-da-lat.jpg";
+    String fileUrl3 = "http://divivuvn.com/wp-content/uploads/2017/12/ho-than-tho.jpg";
+    String fileUrl4 = "http://divivuvn.com/wp-content/uploads/2017/12/so-thu-zoodoo.jpg";
+
+    String fileName = "img";
+    String JPG = ".jpg";
     File rootDir = Environment.getExternalStorageDirectory();
 
     /*
@@ -48,7 +54,7 @@ public class Main19Activity extends AppCompatActivity {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DownLoadFileAsync().execute(fileUrl);
+                new DownLoadFileAsync().execute(fileUrl,fileUrl1,fileUrl2,fileUrl3,fileUrl4);
                 Log.e("tusinh", "kick download");
             }
         });
@@ -78,26 +84,31 @@ public class Main19Activity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... aurl) {
+            int count = aurl.length;
+
             try {
-                URL u = new URL(aurl[0]);
-                HttpURLConnection c = (HttpURLConnection) u.openConnection();
-                c.setRequestMethod("GET");
-                c.setDoOutput(true);
-                c.connect();
+                for(int i=0;i<count;i++){
+                    URL u = new URL(aurl[i]);
+                    HttpURLConnection c = (HttpURLConnection) u.openConnection();
+                    c.setRequestMethod("GET");
+                    c.setDoOutput(true);
+                    c.connect();
 
-                int lengthOfFile = c.getContentLength();
-                FileOutputStream f = new FileOutputStream(new File(rootDir + "/test_async_task/", fileName));
-                InputStream in = c.getInputStream();
+                    int lengthOfFile = c.getContentLength();
+                    FileOutputStream f = new FileOutputStream(new File(rootDir + "/test_async_task/", fileName+i+JPG));
+                    InputStream in = c.getInputStream();
 
-                byte[] buffer = new byte[1024];
-                int len1 = 0;
-                long total = 0;
-                while ((len1 = in.read(buffer)) > 0) {
-                    total += len1;
-                    publishProgress("" + (int) ((total * 100) / lengthOfFile));
-                    f.write(buffer, 0, len1);
+                    byte[] buffer = new byte[1024];
+                    int len1 = 0;
+                    long total = 0;
+                    while ((len1 = in.read(buffer)) > 0) {
+                        total += len1;
+                        publishProgress("" + (int) ((total * 100) / lengthOfFile));
+                        f.write(buffer, 0, len1);
+                    }
+                    f.close();
                 }
-                f.close();
+
 
 
             } catch (MalformedURLException e) {
